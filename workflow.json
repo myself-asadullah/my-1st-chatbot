@@ -1,0 +1,143 @@
+{
+  "name": "GPT Chat Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {
+          "inputPlaceholder": "Type your message...",
+          "showWelcomeScreen": true,
+          "getStarted": "Start chatting",
+          "subtitle": "Ask me anything, I'm here to help.",
+          "title": "AI Assistant",
+          "responseMode": "streaming"
+        }
+      },
+      "id": "a0095f53-211b-4cab-9116-4f03a8acdfbe",
+      "name": "Chat Trigger",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        96,
+        304
+      ],
+      "webhookId": "609607f8-80a7-4404-8cee-a0983d5f0920"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a friendly, helpful AI assistant. Answer clearly and concisely, and ask a clarifying question only when the user's request is genuinely ambiguous.",
+          "enableStreaming": true
+        }
+      },
+      "id": "46c5aa0b-6e89-44b3-b981-14e9e8af912c",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        464,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "id": "64362e6e-8606-4589-b350-49a74fd5eb8c",
+      "name": "Conversation Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        624,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## GPT Chat Agent\n\nFlow: n8n Webchat message -> AI Agent (GPT-5 mini + 10-turn buffer memory) -> Streaming reply\n\nSetup Checklist:\n1. Connect OpenAI credential to \"OpenAI Chat Model\"\n2. Public chat webhook is enabled — share the chat URL to let others use it\n3. Adjust the system message or memory window length as needed",
+        "height": 276,
+        "width": 560,
+        "color": 5
+      },
+      "id": "sticky-note-gptchat-01",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAlibabaCloud",
+      "typeVersion": 1,
+      "position": [
+        464,
+        480
+      ],
+      "id": "ee2387a2-8151-407d-b9e6-3177dafef200",
+      "name": "Qwen Cloud Chat Model",
+      "credentials": {
+        "alibabaCloudApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "REPLACE_WITH_YOUR_CREDENTIAL_NAME"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Chat Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversation Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qwen Cloud Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "29993c42-29f8-4976-b7e0-d4cae10c55be",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp",
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5dcb2f19b86d2dc3ceed50e503f4ef31860e0ef50a13a707103a4b7fea228249"
+  },
+  "nodeGroups": [],
+  "id": "TTrVMZvEjvjeIo9M",
+  "tags": []
+}
